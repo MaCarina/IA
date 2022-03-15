@@ -78,13 +78,13 @@ main :-
 %*******************************************************************************
 
 aetoile(nil, nil, _) :- print("PAS de SOLUTION : L'ETAT FINAL N'EST PAS ATTEIGNABLE !").
-aetoile(Pf, Ps, Qs) :- 
+aetoile(Pf, _, Qs) :- 
     final_state(Umin),
-    suppress_min([[Fmin, Hmin, Gmin], Umin], Pf, Pf2),
+    suppress_min([[_, _, _], Umin], Pf, Pf2),
     affiche_solution(Qs).
 
 aetoile(Pf, Ps, Qs) :-
-    suppress_min([[Fmin, Hmin, Gmin], Umin], Pf, Pf2),
+    suppress_min([[_, _, _], Umin], Pf, Pf2),
     suppress([Umin,[_,_,_], _, _], Ps, Ps2),
 
     % Developpement de u
