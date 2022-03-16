@@ -24,9 +24,9 @@
 % import (clpfd).
 :- use_module(library(clpfd)).
 
-situation_initiale([ [x,o,_],
-                     [_,x,_],
-                     [x,_,o] ]).
+situation_initiale([ [_,_,x],
+                     [o,x,_],
+                     [o,x,o] ]).
 
 	% Convention (arbitraire) : c'est x qui commence
 
@@ -181,8 +181,9 @@ alignement_perdant(Ali, J) :-
 % A FAIRE
 successeur(J, Etat,[L,C]) :- 
 	nth1(L,Etat,Ligne),
-	possible(Ligne,J),
-	nth1(C,Ligne,J).
+	nth1(C,Ligne,E),
+	var(E),
+	E = J.
 
 	/**************************************
    	 EVALUATION HEURISTIQUE D'UNE SITUATION
