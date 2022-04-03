@@ -33,7 +33,7 @@ Les autres prédicats sont spécifiques au Taquin.
    % format :  initial_state(+State) ou State est une matrice (liste de listes)
    
 
-initial_state([ [b, h, c],       % C'EST L'EXEMPLE PRIS EN COURS
+initial_state1([ [b, h, c],       % C'EST L'EXEMPLE PRIS EN COURS
                 [a, f, d],       % 
                 [g,vide,e] ]).   % h1=4,   h2=5,   f*=5
 
@@ -41,27 +41,27 @@ initial_state([ [b, h, c],       % C'EST L'EXEMPLE PRIS EN COURS
 
 % AUTRES EXEMPLES POUR LES TESTS DE  A*
 
-/*
-initial_state([ [ a, b, c],        
+
+initial_state2([ [ a, b, c],        
                 [ g, h, d],
                 [vide,f, e] ]). % h2=2, f*=2
 
-initial_state([ [b, c, d],
+initial_state3([ [b, c, d],
                 [a,vide,g],
                 [f, h, e]  ]). % h2=10 f*=10
 			
-initial_state([ [f, g, a],
+initial_state4([ [f, g, a],
                 [h,vide,b],
                 [d, c, e]  ]). % h2=16, f*=20
 			
-initial_state([ [e, f, g],
+initial_state5([ [e, f, g],
                 [d,vide,h],
                 [c, b, a]  ]). % h2=24, f*=30 
 
-initial_state([ [a, b, c],
+initial_state6([ [a, b, c],
                 [g,vide,d],
                 [h, f, e]]). % etat non connexe avec l'etat final (PAS DE SOLUTION)
-*/  
+ 
 
 
    %******************
@@ -150,7 +150,7 @@ delete(N,X,[Y|L], [Y|R]) :-
    %*******************
    
    %*******************************************************************
-   % Coordonnees X(colonne),Y(Ligne) d'une piece P dans une situation U
+   % Coordonnees X(colonne),Y(Ligne) dune piece P dans une situation U
    %*******************************************************************
 	% format : coordonnees(?Coord, +Matrice, ?Element)
 	% Définit la relation entre des coordonnees [Ligne, Colonne] et un element de la matrice
@@ -167,9 +167,9 @@ delete(N,X,[Y|L], [Y|R]) :-
 	*/
 
 	
-	coordonnees([L,C], Mat, Elt) :-  
-    nth1(L,Mat,Ligne), 
-    nth1(C,Ligne, Elt).    
+coordonnees([L,C], Mat, Elt) :-  
+   nth1(L,Mat,Ligne), 
+   nth1(C,Ligne, Elt).    
 
 %********
  % A FAIRE
@@ -181,8 +181,8 @@ delete(N,X,[Y|L], [Y|R]) :-
    %*************
    
 heuristique(U,H) :-
-    heuristique1(U, H).  % au debut on utilise l'heuristique 1
-%    heuristique2(U, H).  % ensuite utilisez plutot l'heuristique 2  
+%    heuristique1(U, H).  % au debut on utilise l'heuristique 1
+    heuristique2(U, H).  % ensuite utilisez plutot l'heuristique 2  
    
    
    %****************
@@ -197,45 +197,48 @@ heuristique(U,H) :-
    
    % Definir ensuite le predicat malplace(P,U,F) qui est vrai si les coordonnes de P dans U et dans F sont differentes.
    % On peut également comparer les pieces qui se trouvent aux mêmes coordonnees dans U et dans H et voir s'il sagit de la
-   % même piece.
+   % meme piece.
    
-    % Definir enfin l'heuristique qui détermine toutes les pièces mal placées (voir prédicat findall) 
+    % Definir enfin lheuristique qui détermine toutes les pièces mal placées (voir prédicat findall) 
 	% et les compte (voir prédicat length)
    
-    heuristique1(U, H) :- 
-    final_state(Fin),
-    findall(P,(
-    nth1(L,U,Ligne), 
-    nth1(C,Ligne, P1), 
-    P1 \= vide, 
-    nth1(L,Fin,Ligne2), 
-    nth1(C,Ligne2,P2),
-    P1\=P2), List),
-    length(List, H).     
-	%********
-    % A FAIRE
-    %********
-   
+heuristique1(U, H) :- 
+   final_state(Fin),
+   findall(1,(
+      nth1(L,U,Ligne), 
+      nth1(C,Ligne, P1), 
+      P1 \= vide, 
+      nth1(L,Fin,Ligne2), 
+      nth1(C,Ligne2,P2),
+      P1\=P2), List),
+   length(List, H).        
    
    %****************
    %HEURISTIQUE no 2
    %****************
    
    % Somme des distances de Manhattan à parcourir par chaque piece
-   % entre sa position courante et sa positon dans l'etat final
+   % entre sa position courante et sa positon dans letat final
 
    
-    heuristique2(U, H) :- 
-    final_state(Fin),
-    findall(Dist, 
-            (coordonnees([L1,C1], U, Elt),
-             coordonnees([L2,C2], Fin, Elt),
-             not(Elt==vide),
-             Dist is (abs(L2-L1) + abs(C2-C1))
-            ), List),
-    sumlist(List,H).
+heuristique2(U, H) :- 
+   final_state(Fin),
+   findall(Dist, 
+      (coordonnees([L1,C1], U, Elt),
+      coordonnees([L2,C2], Fin, Elt),
+      not(Elt==vide),
+      Dist is (abs(L2-L1) + abs(C2-C1))
+      ), List),
+   sumlist(List,H).
+
 	%********
     % A FAIRE
     %********
-									
-									
+
+% temps d exe en ms					
+tps(Runtime) :-
+   statistics([Start,_]),
+   initial_state(Ini),
+   heuristique1(Ini,_),
+   statistics([Stop,_]),	
+   Runtime is Stop-Start.					
