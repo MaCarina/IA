@@ -24,9 +24,21 @@
 % import (clpfd).
 :- use_module(library(clpfd)).
 
-situation_initiale([ [_,_,x],
-                     [o,x,_],
-                     [o,x,o] ]).
+situation_initiale([ [_,_,_],
+                     [_,_,_],
+                     [_,_,_] ]).
+
+situation_gagnante([ [x,_,x],
+                     [o,_,_],
+                     [_,o,_] ]).
+			
+situation_perdante([ [o,o,o],
+                     [_,x,_],
+                     [_,x,_] ]).
+
+situation_nulle([ [x,o,x],
+                  [x,x,o],
+                  [o,x,o] ]).
 
 	% Convention (arbitraire) : c'est x qui commence
 
@@ -136,7 +148,7 @@ possible pour J qui n'a aucun element encore libre.
 	*/
 	
 	/*
-	Remarque : le predicat ground(X) permet de verifier qu'un terme
+	Remarque : le predicat ground(X) permet de verifier quun terme
 	prolog quelconque ne contient aucune partie variable (libre).
 	exemples :
 		?- ground(Var).
@@ -190,12 +202,12 @@ successeur(J, Etat,[L,C]) :-
   	 **************************************/
 
 	/*
-	1/ l'heuristique est +infini si la situation J est gagnante pour J
-	2/ l'heuristique est -infini si la situation J est perdante pour J
+	1/ lheuristique est +infini si la situation J est gagnante pour J
+	2/ lheuristique est -infini si la situation J est perdante pour J
 	3/ sinon, on fait la difference entre :
-	   le nombre d'alignements possibles pour J
+	   le nombre dalignements possibles pour J
 	moins
- 	   le nombre d'alignements possibles pour l'adversaire de J
+ 	   le nombre dalignements possibles pour ladversaire de J
 */
 
 
